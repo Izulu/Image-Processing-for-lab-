@@ -1,0 +1,55 @@
+function [ value ] = Line_value( image,start_point,end_point )
+%划线取值函数,
+%   输入图像 image
+%   划线端点 start_point, end_point
+%   输出为取值结果的列表：序号，灰度值
+%   以x,y上较长的一维取值，自动判断是否为垂直坐标轴直线
+    x1 = start_point(1);
+    x2 = end_point(1);
+    y1 = start_point(2);
+    y2 = end_point(2);
+    len_x = abs(x2-x1);
+    len_y = abs(y2-y1);
+    if len_x == 0                          %垂直y轴曲线斜率无穷大，直接以固定x值取值
+        value = zeros(y2-y1,1);
+        for i = y1:y2
+            y = i;
+            x = x1;
+            value(i-y1+1,1) = i-y1+1;
+            value(i-y1+1,2) = image(y,x);
+        end
+        return;
+    else
+        k = (y2-y1)/(x2-x1);               %求直线斜率和截距
+        b = y1-k*x1;
+    end
+    if len_x >= len_y                     %判断以较长维度取值，即若为横线则以x取值
+        if x2<x1                          %若endpoint的x值较大，则交换二者坐标
+            temp = x1;
+            x1 = x2;
+            x2 = temp;
+        end
+        value = zeros(x2-x1,1);
+        for i = x1:x2
+            x = i;
+            y = round(k*x+b);
+            value(i-x1+1,1) = i-x1+1;
+            value(i-x1+1,2) = image(y,x);
+        end
+    else
+        if y2<y1                         %若endpoint的y值较大，则交换二者坐标
+            temp = y1;
+            y1 = y2;
+            y2 = temp;
+        end
+        value = zeros(y2-y1,1);
+        for i = y1:y2
+            y = i;
+            x = round((y-b)/k);          %k为0则len_x一定大于len_y,到不了这个分支
+            value(i-y1+1,1) = i-y1+1;
+            value(i-y1+1,2) = image(y,x);
+        end 
+    end
+   
+
+end
