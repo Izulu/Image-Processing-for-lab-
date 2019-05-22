@@ -1,0 +1,21 @@
+function [ ] = saveimage( image,t )
+%图像保存
+% 输入图像 image
+% 保存类型 t
+    setTag(t,'ImageLength',size(image,1))
+    setTag(t,'ImageWidth',size(image,2))
+    setTag(t,'Photometric',1)
+    setTag(t,'BitsPerSample',32)
+    setTag(t,'SamplesPerPixel',1)
+    setTag(t,'SampleFormat',3)
+    setTag(t,'RowsPerStrip',3)
+    setTag(t,'XResolution',300)
+    setTag(t,'YResolution',300)
+    setTag(t,'YResolution',300)
+    setTag(t,'YResolution',300)
+    setTag(t,'Compression',1)
+    setTag(t,'PlanarConfiguration',1)
+    setTag(t,'Software','MATLAB')
+    write(t,image)
+    close(t)
+end
