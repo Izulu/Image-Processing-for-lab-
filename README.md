@@ -6,7 +6,7 @@ Matlab codes for Zhang nanolab imaging processing
 2.save-image-function. 
 3.image-normalization 
 
-Download the above files for simple and correct use. 
-Run main-process in Matlab to analyzed your experiments image data. 
+  Download the above files for simple and correct use. 
+  Run main-process in Matlab to analyzed your experiments image data. 
 
-·For other functions you want to used, contacting someone in the lab to handle which.
+·For other functions you want to used, if you don't know, please contact someone who knows about it in the lab to handle these.
