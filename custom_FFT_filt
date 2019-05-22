@@ -1,0 +1,9 @@
+function [ result_image ] = image_fft_filt( image,mask )
+%   对图像进行频率域滤波消除周期性噪声
+%   
+    fft_im = fftshift(fft2(double(image)));
+    %imshow(logs(abs(fft_im)+1),[]);
+    inverse_im = ifft2(ifftshift(fft_im.*mask));
+    result_image = abs(inverse_im);
+
+end
