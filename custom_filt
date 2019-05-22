@@ -1,0 +1,18 @@
+function [ result_image ] = custom_filt( image,filter_size,filter )
+% 自定义滤波器，根据需要调整滤波器参数
+% 默认为边缘复制填充:padarray = repilcate
+%   输入图像 image
+%   滤波器边长 filter_size  为 n*n 奇数变长
+
+ result_image = double(image);
+ filter_radius = (filter_size -1)/2;
+ image = padarray(image,[filter_radius filter_radius],'replicate'); %填充边缘以满足图像尺寸不变
+ [w,h] = size(image);
+    for x = 1+filter_radius:1:w-filter_radius
+        for y = 1+filter_radius:1:h-filter_radius
+            is=image(x-filter_radius:1:x+filter_radius,y-filter_radius:1:y+filter_radius); %is 即滤波器处理中的邻域像素矩阵
+            value = is.* filter;     %对当前邻域像素用自定义的滤波器进行滤波处理    
+            result_image(x-filter_radius,y-filter_radius)= value;
+         end
+    end
+end
