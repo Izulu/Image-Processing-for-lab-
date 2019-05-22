@@ -1,0 +1,16 @@
+function [ normalized_image ] = image_normalized( image, low_threshold, high_threshold,K )
+%图像灰度归一化
+%   输入图像 image
+%   噪点阈值 low_threshold, high_threshold  因图像噪点导致过高和过低的不正常灰度值，需要提前扣除不计入归一
+%   归一比例 K  图像将由原灰度范围归一到[0,K]范围灰度值，默认K=1
+    if nargin < 4
+        K =1;
+    end
+    image(image>high_threshold)= 0;
+    image(image<low_threshold)= 0; %扣除噪点,默认无噪点
+    min_value=min(image(:));  %求图像最小值，区域位置自定义，默认全图
+    image = image - min_value;     %非零归一化平移
+    max_value=max(image(:));  %求图像最大值，区域位置自定义，默认全图
+    normalized_image=image/max_value *K;
+
+end
