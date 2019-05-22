@@ -1,0 +1,31 @@
+clc
+clear
+
+%以下为设定参数
+path = 'C:\Users\liuxuan\Desktop\NIR AF imaging\Data\image\20190419-NIRLN'; %图像路径
+left_up_point = [1 1];  right_bottom_point = [512 640]; %图像裁剪区域左上角及右下角，以矩阵坐标为准，与imshow中坐标相反,imshow游标取点需要翻转xy
+high_threshold = 65536;
+low_threshold = -200;%归一化中噪点阈值,大于阈值将置为0，默认无噪点即阈值大于可检测的最大值
+background_area = [1 1 1 640];  %扣背景中黑背景区域范围，左上角点、右下角点，默认为图像第一行平均值
+show_image = 0; %是否在Matlab中显示处理后的图像，默认为均显示，在处理大量图像时请改为0不显示。
+
+path=[path '\'];
+if ~exist([path,'data']) 
+    mkdir([path,'data'])
+end 
+filelist=dir([path '*.tif']);
+len= length(filelist);
+
+for i=1:len
+    im=imread([path,filelist(i).name]);
+    im2 = imcrop(im,[flip(left_up_point) flip(right_bottom_point-left_up_point)]);   %图像裁剪
+    %im3 = image_removebackground(im2, background_area);                        %调用自写扣背景函数
+    im4 = image_normalized(im2, low_threshold, high_threshold,1);   %调用自写归一化函数，归一化的噪声阈值可在子函数中调
+    if show_image ==1                                                         %批量处理时不显示图像，需要显示时设置为1 
+        figure
+        imshow(im4,[]);  
+    end
+    type1 = Tiff(strcat([path,'data\'],filelist(i).name(1:end-5)),'w');
+    saveimage(im4,type1); %调用自写保存格式脚本，注意保存的图像变量    
+end
+h = helpdlg('Processing Finished!','Imaging Processing');
